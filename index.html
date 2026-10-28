@@ -1066,10 +1066,19 @@ async function uploadFile(f) {
     const data = await new Promise((res, rej) => {
         const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1]); r.onerror = rej; r.readAsDataURL(f);
     });
-    const r = await fetch(SYNC_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ action: 'upload', name: f.name, mime: f.type || 'application/octet-stream', data }) });
-    const j = await r.json();
+    const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 120000);
+    let txt;
+    try {
+        const r = await fetch(SYNC_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, signal: ctl.signal,
+            body: JSON.stringify({ action: 'upload', name: f.name, mime: f.type || 'application/octet-stream', data }) });
+        txt = await r.text();
+    } catch (e) {
+        throw new Error(e.name === 'AbortError' ? 'tempo scaduto (file troppo pesante o rete lenta)' : 'server non raggiungibile');
+    } finally { clearTimeout(timer); }
+    let j;
+    try { j = JSON.parse(txt); } catch (e) { throw new Error('Drive non autorizzato: esegui la funzione "folder" in Apps Script e ridistribuisci'); }
     if (!j.ok) throw new Error(j.error || 'Upload non riuscito');
+    if (!j.id) throw new Error('il server ha ancora il codice vecchio: ridistribuisci come "Nuova versione"');
     return { id: j.id, name: j.name, mime: j.mime, size: j.size };
 }
 
