@@ -226,7 +226,7 @@ select.tool{background:rgba(17,24,39,.9)}
                     <i class="fa-solid fa-bullhorn text-pink-400 animate-bounce"></i> Bacheca Rappresentante
                 </span>
                 <p class="truncate text-gray-300">
-                    Benvenuti su HUB 1 CIT! Ricordatevi di caricare le mappe concettuali per le verifiche e interrogazioni.
+                    Benvenuti su HUB 1 CIT! Ricordatevi di caricare le mappe concettuali per le verifiche di laboratorio e informatica.
                 </p>
             </div>
         </header>
@@ -416,6 +416,17 @@ select.tool{background:rgba(17,24,39,.9)}
                         <input type="url" id="modal-image" placeholder="https://... (puoi lasciarlo vuoto)"
                             class="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
                     </div>
+                </div>
+
+                <!-- Attachments -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Allegati <span class="text-gray-500 normal-case font-normal">— foto, PDF, documenti, qualsiasi file (max 15 MB ciascuno)</span></label>
+                    <label id="drop-zone" for="modal-files" class="flex flex-col items-center justify-center gap-1 px-4 py-5 rounded-xl border-2 border-dashed border-white/15 bg-white/5 hover:border-cyan-400/60 hover:bg-cyan-500/5 text-gray-400 text-sm cursor-pointer transition-all text-center">
+                        <i class="fa-solid fa-paperclip text-xl text-cyan-400"></i>
+                        <span>Tocca per scegliere o trascina qui i file</span>
+                    </label>
+                    <input type="file" id="modal-files" multiple class="hidden">
+                    <ul id="att-list" class="mt-3 space-y-2"></ul>
                 </div>
 
                 <div class="pt-4 flex items-center justify-end gap-3">
@@ -999,7 +1010,143 @@ document.addEventListener('keydown', e => {
     if (e.key === 'n') openPublishBtn.click();
 });
 
-setSync(SYNC_URL ? 'ok' : 'off'); renderNotes(); pull(); if (SYNC_URL) setInterval(pull, 45000); 
+setSync(SYNC_URL ? 'ok' : 'off'); renderNotes(); pull(); if (SYNC_URL) setInterval(pull, 45000);
+</script>
+<script>
+// ===== ALLEGATI (foto, documenti, qualsiasi file) =====
+const MAX_MB = 15;
+let pendingFiles = [], keptAtt = [], removedAtt = [];
+const aView = a => 'https://drive.google.com/file/d/' + a.id + '/view';
+const aDl = a => 'https://drive.google.com/uc?export=download&id=' + a.id;
+const aThumb = a => 'https://drive.google.com/thumbnail?id=' + a.id + '&sz=w400';
+const isImg = a => (a.mime || a.type || '').startsWith('image/');
+const fmtSize = b => b < 1024 ? b + ' B' : b < 1048576 ? Math.round(b / 1024) + ' KB' : (b / 1048576).toFixed(1) + ' MB';
+function fileIcon(a) {
+    const m = (a.mime || a.type || '').toLowerCase(), n = (a.name || '').toLowerCase();
+    if (m.includes('pdf') || n.endsWith('.pdf')) return 'fa-file-pdf text-red-400';
+    if (/word|\.docx?$|\.odt$/.test(m + n)) return 'fa-file-word text-blue-400';
+    if (/sheet|excel|\.xlsx?$|\.csv$/.test(m + n)) return 'fa-file-excel text-emerald-400';
+    if (/presentation|powerpoint|\.pptx?$/.test(m + n)) return 'fa-file-powerpoint text-orange-400';
+    if (/zip|rar|7z|tar|gz/.test(m + n)) return 'fa-file-zipper text-amber-400';
+    if (m.startsWith('video/')) return 'fa-file-video text-pink-400';
+    if (m.startsWith('audio/')) return 'fa-file-audio text-purple-400';
+    if (m.startsWith('image/')) return 'fa-file-image text-cyan-400';
+    if (m.startsWith('text/') || /\.(js|py|java|c|cpp|html|css|json|md|txt)$/.test(n)) return 'fa-file-lines text-gray-300';
+    return 'fa-file text-gray-300';
+}
+
+function renderAttList() {
+    const li = (ic, name, size, fn) => `<li class="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs">
+        <i class="fa-solid ${ic} text-lg shrink-0"></i><span class="flex-1 min-w-0 truncate text-gray-200">${esc(name)}</span>
+        <span class="text-gray-500 shrink-0">${fmtSize(size || 0)}</span>
+        <button type="button" onclick="${fn}" class="w-7 h-7 rounded-lg hover:bg-red-500/20 text-gray-400 hover:text-red-400 shrink-0"><i class="fa-solid fa-xmark"></i></button></li>`;
+    $('att-list').innerHTML =
+        keptAtt.map((a, i) => li(fileIcon(a), a.name, a.size, `removeAtt('k',${i})`)).join('') +
+        pendingFiles.map((f, i) => li(fileIcon(f), f.name, f.size, `removeAtt('p',${i})`)).join('');
+}
+window.removeAtt = (t, i) => {
+    if (t === 'k') removedAtt.push(...keptAtt.splice(i, 1)); else pendingFiles.splice(i, 1);
+    renderAttList();
+};
+function addFiles(list) {
+    [...list].forEach(f => {
+        if (f.size > MAX_MB * 1048576) return showToast('"' + f.name + '" supera i ' + MAX_MB + ' MB');
+        pendingFiles.push(f);
+    });
+    renderAttList();
+}
+$('modal-files').onchange = e => { addFiles(e.target.files); e.target.value = ''; };
+const dz = $('drop-zone');
+['dragenter', 'dragover'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add('border-cyan-400/60'); }));
+['dragleave', 'drop'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove('border-cyan-400/60'); }));
+dz.addEventListener('drop', e => addFiles(e.dataTransfer.files));
+publishForm.addEventListener('reset', () => { pendingFiles = []; keptAtt = []; removedAtt = []; renderAttList(); });
+
+async function uploadFile(f) {
+    const data = await new Promise((res, rej) => {
+        const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1]); r.onerror = rej; r.readAsDataURL(f);
+    });
+    const r = await fetch(SYNC_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ action: 'upload', name: f.name, mime: f.type || 'application/octet-stream', data }) });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || 'Upload non riuscito');
+    return { id: j.id, name: j.name, mime: j.mime, size: j.size };
+}
+
+// Pubblicazione / modifica con upload degli allegati
+window.submitHook = async () => {
+    if (!currentStudent) return needName();
+    const btn = publishForm.querySelector('[type=submit]'), label = btn.innerHTML, uploaded = [];
+    btn.disabled = true;
+    try {
+        if (pendingFiles.length && !SYNC_URL) throw new Error('Per gli allegati serve la sincronizzazione attiva');
+        for (let i = 0; i < pendingFiles.length; i++) {
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Carico ' + (i + 1) + '/' + pendingFiles.length + '…';
+            uploaded.push(await uploadFile(pendingFiles[i]));
+        }
+    } catch (err) {
+        if (uploaded.length) api({ action: 'trash', ids: uploaded.map(a => a.id) });
+        btn.disabled = false; btn.innerHTML = label;
+        return showToast('Caricamento fallito: ' + err.message);
+    }
+    const g = id => $(id).value.trim();
+    const f = { title: g('modal-title'), subject: $('modal-subject').value, description: g('modal-desc'), link: g('modal-link'), image: g('modal-image'), attachments: [...keptAtt, ...uploaded] };
+    let n;
+    if (editingId) { n = notesData.find(x => x.id === editingId); Object.assign(n, f); }
+    else { n = { id: Date.now().toString(), ts: Date.now(), date: new Date().toLocaleDateString('it-IT', { day: '2-digit', month: 'short', year: 'numeric' }), author: currentStudent, likes: [], pinned: false, ...f }; notesData.unshift(n); }
+    if (removedAtt.length) api({ action: 'trash', ids: removedAtt.map(a => a.id) });
+    saveNotes(); api({ action: 'upsert', note: n }); renderNotes(); closePublishModal();
+    showToast(editingId ? 'Appunto modificato!' : 'Pubblicato da ' + currentStudent + '!'); editingId = null;
+    btn.disabled = false; btn.innerHTML = label;
+};
+
+// Modifica: carica gli allegati già presenti
+const _edit = window.editNote;
+window.editNote = id => {
+    _edit(id);
+    const n = notesData.find(x => x.id === id);
+    if (!n || editingId !== id) return;
+    keptAtt = [...(n.attachments || [])]; removedAtt = []; pendingFiles = []; renderAttList();
+};
+
+// Schede: icona graffetta e copertina automatica dalla prima foto
+const _render = window.renderNotes;
+window.renderNotes = () => {
+    _render();
+    [...notesGrid.children].forEach(card => {
+        const m = /openViewModal\('([^']+)'\)/.exec(card.getAttribute('onclick') || ''), n = m && notesData.find(x => x.id === m[1]);
+        const A = (n && n.attachments) || [];
+        if (!A.length) return;
+        const cover = card.querySelector('.relative');
+        const pic = A.find(isImg);
+        if (pic && !cover.querySelector('img')) {
+            cover.classList.replace('h-24', 'h-44');
+            cover.insertAdjacentHTML('afterbegin', `<img src="${aThumb(pic)}" alt="" onerror="this.remove()" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">`);
+        }
+        cover.insertAdjacentHTML('beforeend', `<span class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-black/60 text-cyan-300 backdrop-blur-md border border-white/10"><i class="fa-solid fa-paperclip mr-1"></i>${A.length}</span>`);
+    });
+};
+
+// Dettaglio: elenco allegati con Apri / Scarica
+const _open2 = window.openViewModal;
+window.openViewModal = id => {
+    _open2(id);
+    const n = notesData.find(x => x.id === id), A = (n && n.attachments) || [], row = viewModalContent.querySelector('.pt-4');
+    if (!A.length || !row) return;
+    const btn = 'px-3 py-2 rounded-lg text-xs font-semibold border border-white/15 bg-white/5 hover:bg-white/10 text-gray-200 flex items-center gap-1.5';
+    row.insertAdjacentHTML('beforebegin', `<div>
+        <h4 class="text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2"><i class="fa-solid fa-paperclip text-cyan-400 mr-1"></i>Allegati (${A.length})</h4>
+        <ul class="space-y-2">${A.map(a => `<li class="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl p-2.5">
+            ${isImg(a)
+                ? `<a href="${aView(a)}" target="_blank" rel="noopener" class="shrink-0"><img src="${aThumb(a)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('i'),{className:'fa-solid fa-file-image text-cyan-400 text-xl'}))" class="w-12 h-12 rounded-lg object-cover"></a>`
+                : `<span class="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center shrink-0"><i class="fa-solid ${fileIcon(a)} text-xl"></i></span>`}
+            <div class="flex-1 min-w-0"><div class="text-sm font-medium text-white truncate">${esc(a.name)}</div><div class="text-[11px] text-gray-500">${fmtSize(a.size || 0)}</div></div>
+            <a href="${aView(a)}" target="_blank" rel="noopener" class="${btn}"><i class="fa-solid fa-eye"></i><span class="hidden sm:inline">Apri</span></a>
+            <a href="${aDl(a)}" class="${btn}"><i class="fa-solid fa-download"></i><span class="hidden sm:inline">Scarica</span></a>
+        </li>`).join('')}</ul></div>`);
+};
+
+renderNotes();
 </script>
 </body>
 </html>
