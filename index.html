@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="it" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUB 1 CIT — ITIS Badoni Lecco</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#080c14',
+                        cardBg: 'rgba(255, 255, 255, 0.03)',
+                        cardBorder: 'rgba(255, 255, 255, 0.08)',
+                        neonCyan: '#06b6d4',
+                        neonPurple: '#a855f7',
+                        neonEmerald: '#10b981',
+                        neonPink: '#ec4899'
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 3s infinite alternate',
+                        'float': 'float 6s ease-in-out infinite',
+                        'shimmer': 'shimmer 2.5s infinite linear',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%': { boxShadow: '0 0 20px rgba(6, 182, 212, 0.25)' },
+                            '100%': { boxShadow: '0 0 45px rgba(168, 85, 247, 0.5)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #060911;
+            color: #f3f4f6;
+            font-family: 'Outfit', sans-serif;
+            background-image: 
+                radial-gradient(circle at 15% 10%, rgba(168, 85, 247, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.08) 0%, transparent 60%);
+            background-attachment: fixed;
+        }
+
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: rgba(22, 30, 49, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            border-color: rgba(168, 85, 247, 0.5);
+            box-shadow: 0 20px 40px -15px rgba(168, 85, 247, 0.3);
+        }
+
+        .glass-modal {
+            background: rgba(11, 16, 28, 0.92);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #060911;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(135deg, #38bdf8 0%, #a855f7 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Subject Badge Styles */
+        .badge-italiano { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-scienze-fisica { background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3); }
+        .badge-informatica { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .badge-scienze-chimica { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .badge-diritto { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge-inglese { background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .badge-ttrg { background: rgba(99, 102, 241, 0.15); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3); }
+        .badge-matematica { background: rgba(20, 184, 166, 0.15); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.3); }
+        .badge-irc { background: rgba(220, 38, 38, 0.15); color: #fca5a5; border: 1px solid rgba(220, 38, 38, 0.15); }
+        .badge-motoria { background: rgba(217, 70, 239, 0.15); color: #e879f9; border: 1px solid rgba(217, 70, 239, 0.3); }
+        .badge-geografia { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .badge-altro { background: rgba(147, 51, 234, 0.15); color: #c084fc; border: 1px solid rgba(147, 51, 234, 0.3); }
+    </style>
+<style>
+html{scroll-behavior:smooth}::selection{background:#a855f7;color:#fff}
+body::before,body::after{content:"";position:fixed;z-index:-1;width:60vmax;height:60vmax;border-radius:50%;filter:blur(110px);opacity:.28;pointer-events:none;animation:drift 22s ease-in-out infinite alternate}
+body::before{top:-25vmax;left:-15vmax;background:radial-gradient(#7c3aed,transparent 65%)}
+body::after{bottom:-25vmax;right:-15vmax;background:radial-gradient(#06b6d4,transparent 65%);animation-delay:-11s}
+@keyframes drift{to{transform:translate(8vmax,6vmax) scale(1.2)}}
+@keyframes cardIn{from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:none}}
+.card-in{animation:cardIn .6s cubic-bezier(.16,1,.3,1) both}
+.glass-panel{box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 10px 40px -20px #000}
+.glass-card{position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.glass-card::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(135deg,#06b6d4,#a855f7,#ec4899);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s;pointer-events:none;z-index:5}
+.glass-card:hover::before{opacity:1}
+.text-gradient{background-size:200% auto;animation:shimmerT 6s linear infinite}
+@keyframes shimmerT{to{background-position:200% center}}
+.like-btn{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#9ca3af;transition:.2s}
+.like-btn:hover{color:#f472b6;border-color:#ec4899}.like-btn.liked{color:#f472b6;background:rgba(236,72,153,.15);border-color:rgba(236,72,153,.5)}
+.like-btn.liked i{animation:pop .35s}@keyframes pop{50%{transform:scale(1.5)}}
+.tool{padding:.55rem .9rem;border-radius:.9rem;font-size:.75rem;font-weight:600;color:#d1d5db;display:inline-flex;align-items:center;gap:.4rem;transition:.2s;cursor:pointer}
+.tool:hover,.tool.on{color:#fff;background:rgba(168,85,247,.25);border-color:rgba(168,85,247,.6)}
+select.tool{background:rgba(17,24,39,.9)}
+.pin-badge{background:linear-gradient(135deg,#f59e0b,#ec4899);color:#fff}
+</style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative overflow-x-hidden pb-32">
+
+    <!-- Glowing Background Orbs -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-80 bg-gradient-to-r from-cyan-500/10 via-purple-500/15 to-pink-500/10 blur-[120px] pointer-events-none -z-10"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-6">
+
+        <!-- HEADER SECTION -->
+        <header class="glass-panel rounded-3xl p-6 sm:p-8 mb-8 shadow-2xl relative z-20">
+            <div class="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
+                <div class="absolute -right-12 -bottom-12 w-48 h-48 bg-pink-500/15 rounded-full blur-3xl animate-float"></div>
+                <div class="absolute -left-12 -top-12 w-48 h-48 bg-cyan-500/15 rounded-full blur-3xl"></div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+                <div>
+                    <div class="flex flex-wrap items-center gap-3 mb-2">
+                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 shadow-sm">
+                            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                            ITIS "S. Ten. Vasc. A. Badoni" — Lecco
+                        </span>
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/15 text-purple-300 border border-purple-500/30">
+                            Classe 1 CIT
+                        </span>
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+                        HUB APPUNTI & MAPPE <span class="text-gradient">1 CIT</span>
+                    </h1>
+                    <p class="text-gray-400 mt-2 text-sm sm:text-base max-w-2xl">
+                        Il portale ufficiale della classe gestito dal Rappresentante <strong>Attia Flubatir</strong>. Seleziona il tuo nome dal registro e condividi o scarica appunti e mappe.
+                    </p>
+                </div>
+
+                <!-- RIGHT WIDGET: Class Roster & Stats -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                    <!-- Student Picker -->
+                    <div class="relative min-w-[260px]" id="student-picker">
+                        <button id="student-picker-btn" type="button" aria-haspopup="listbox" aria-expanded="false"
+                            class="w-full glass-panel p-3.5 rounded-2xl border border-white/10 hover:border-cyan-400/60 flex items-center gap-3 text-left transition-all cursor-pointer">
+                            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-white text-lg shadow-lg shrink-0">
+                                <i class="fa-solid fa-user-graduate"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-[11px] font-bold text-cyan-400 uppercase tracking-wider">Chi sei?</div>
+                                <div id="student-picker-label" class="text-sm font-semibold text-white truncate">Scegli il tuo nome</div>
+                            </div>
+                            <i id="student-picker-chevron" class="fa-solid fa-chevron-down text-gray-400 text-xs transition-transform duration-200"></i>
+                        </button>
+
+                        <div id="student-picker-list" role="listbox"
+                            class="hidden absolute right-0 left-0 sm:left-auto mt-2 sm:w-[300px] max-h-80 overflow-y-auto glass-modal rounded-2xl p-2 shadow-2xl z-30">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Counter Box -->
+                    <div class="glass-panel p-3.5 rounded-2xl border border-white/10 flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-white text-lg shadow-lg">
+                            <i class="fa-solid fa-folder-open"></i>
+                        </div>
+                        <div>
+                            <div id="total-notes-count" class="text-xl font-extrabold text-white">0</div>
+                            <div class="text-[11px] text-gray-400 font-medium">Appunti & Mappe</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANNOUNCEMENT TICKER -->
+            <div class="mt-6 pt-4 border-t border-white/10 flex items-center gap-3 text-xs sm:text-sm text-gray-300">
+                <span class="bg-pink-500/20 text-pink-300 font-semibold px-3 py-1 rounded-xl flex items-center gap-1.5 shrink-0">
+                    <i class="fa-solid fa-bullhorn text-pink-400 animate-bounce"></i> Bacheca Rappresentante
+                </span>
+                <p class="truncate text-gray-300">
+                    Benvenuti su HUB 1 CIT! Ricordatevi di caricare le mappe concettuali per le verifiche di laboratorio e informatica.
+                </p>
+            </div>
+        </header>
+
+        <!-- SEARCH & FILTER SECTION -->
+        <section class="mb-8 space-y-4">
+            <div class="flex flex-col md:flex-row gap-4 justify-between items-stretch">
+                <!-- Live Search Bar -->
+                <div class="relative flex-1">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="search-input" placeholder="Cerca tra appunti, argomenti, mappe o autori..." 
+                        class="w-full pl-11 pr-4 py-3.5 rounded-2xl glass-panel text-white placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all">
+                </div>
+
+                <!-- Reset Filters Button -->
+                <button id="reset-filters" class="px-5 py-3.5 rounded-2xl glass-panel text-gray-300 text-sm font-medium hover:bg-white/10 hover:text-white transition-all flex items-center gap-2 justify-center shrink-0">
+                    <i class="fa-solid fa-rotate-left"></i> Tutti gli Appunti
+                </button>
+            </div>
+
+            <!-- TOOLBAR PRO -->
+            <div class="flex flex-wrap items-center gap-2">
+                <select id="sort-select" class="tool glass-panel border border-white/10 focus:outline-none">
+                    <option value="new">🕒 Più recenti</option><option value="old">⏳ Più vecchi</option>
+                    <option value="top">❤️ Più apprezzati</option><option value="az">🔤 A → Z</option>
+                </select>
+                <button id="fav-toggle" class="tool glass-panel border border-white/10"><i class="fa-solid fa-heart"></i> Miei preferiti</button>
+                <button id="export-btn" class="tool glass-panel border border-white/10"><i class="fa-solid fa-download"></i> Backup</button>
+                <button id="import-btn" class="tool glass-panel border border-white/10"><i class="fa-solid fa-upload"></i> Importa</button>
+                <input type="file" id="import-file" accept=".json" class="hidden">
+                <span id="sync-chip" class="ml-auto text-[11px] font-semibold px-3 py-1.5 rounded-full border"></span>
+            </div>
+            
+<!-- Subject Filter Pills (Exact Timetable Subjects) -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none pt-1" id="subject-filters">
+                <button data-subject="all" class="filter-btn active px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 text-white shadow-lg transition-all">
+                    Tutte le Materie
+                </button>
+                <button data-subject="Italiano / Storia" class="filter-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap glass-panel text-gray-300 hover:text-white hover:bg-white/10 transition-all">
+                    📚 Italiano / Storia
+                </button>
+                <button data-subject="Scienze Sperimentali / Fisica Lab" class="filter-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap glass-panel text-gray-300 hover:text-white hover:bg-white/10 transition-all">
+                    ⚡ Scienze Sperimentali / Fisica Lab
+                </button>
+                <button data-subject="Informatica e Reti Lab" class="filter-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap glass-panel text-gray-300 hover:text-white hover:bg-white/10 transition-all">
+                    💻 Informatica e Reti Lab
+                </button>
+                <button data-subject="Scienze Sperimentali / Chimica Lab" class="filter-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap glass-panel text-gray-300 hover:text-white hover:bg-white/10 transition-all">
+                    🧪 Scienze Sperimentali / Chimica Lab
+                </button>
+                <button data-subject="Diritto" class="filter-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap glass-panel text-gray-300 hover:text-white hover:bg-white/10 transition-all">
+                    ⚖️ Diritto
+                </button>
+                <button data-subject="Inglese Lab" class="filter-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap glass-panel text-gray-300 hover:text-white hover:bg-white/10 transition-all">
+                    🇬🇧 Inglese Lab
+                </button>
+                <button data-subject="TTRG" class="filter-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap glass-panel text-gray-300 hover:text-white hover:bg-white/10 transition-all">
+                    📐 TTRG
+                </button>
+                <button data-subject="Matematica" class="filter-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap glass-panel text-gray-300 hover:text-white hover:bg-white/10 transition-all">
+                    🔢 Matematica
+                </button>
+                <button data-subject="IRC" class="filter-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap glass-panel text-gray-300 hover:text-white hover:bg-white/10 transition-all">
+                    🕊️ IRC
+                </button>
+                <button data-subject="Motoria (Palestra)" class="filter-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap glass-panel text-gray-300 hover:text-white hover:bg-white/10 transition-all">
+                    🏃 Motoria (Palestra)
+                </button>
+                <button data-subject="Geografia" class="filter-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap glass-panel text-gray-300 hover:text-white hover:bg-white/10 transition-all">
+                    🌍 Geografia
+                </button>
+            </div>
+        </section>
+
+        <!-- NOTES AND MAPS FEED GRID -->
+        <main>
+            <div id="notes-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamic Content Injected Here -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-center glass-panel rounded-3xl mt-4">
+                <div class="w-20 h-20 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400 text-3xl mb-4 animate-pulse">
+                    <i class="fa-solid fa-folder-open"></i>
+                </div>
+                <h3 id="empty-title" class="text-xl font-bold text-white mb-1">Nessun appunto trovato</h3>
+                <p id="empty-text" class="text-gray-400 text-sm max-w-md">Non ci sono elementi corrispondenti ai filtri attuali.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="mt-24 border-t border-white/5 py-8 text-center text-xs text-gray-500">
+        <p>© 2026 HUB 1 CIT — ITIS Badoni Lecco. Creato dal Rappresentante Attia Flubatir.</p>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- FLOATING ACTION BUTTON (BOTTOM LEFT CORNER) -->
+    <!-- ========================================== -->
+    <div class="fixed bottom-6 left-6 z-40">
+        <button id="open-publish-modal-btn" 
+            class="group flex items-center gap-3 bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-white font-bold px-6 py-4 rounded-full shadow-2xl shadow-purple-900/60 hover:shadow-cyan-500/40 transition-all duration-300 transform hover:scale-105 active:scale-95 animate-pulse-glow">
+            <span class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-lg group-hover:rotate-90 transition-transform duration-300">
+                <i class="fa-solid fa-plus"></i>
+            </span>
+            <span class="text-sm tracking-wide pr-1">Pubblica Appunto</span>
+        </button>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- PUBLISH MODAL -->
+    <!-- ========================================== -->
+    <div id="publish-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+        <div class="glass-modal w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl relative transform scale-95 transition-all duration-300 max-h-[90vh] overflow-y-auto" id="publish-modal-card">
+            
+            <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Pubblica Appunto / Mappa</h2>
+                        <p class="text-xs text-gray-400">Condividi risorsa con la classe 1 CIT</p>
+                    </div>
+                </div>
+                <button id="close-publish-modal-btn" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white flex items-center justify-center transition-all">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="publish-form" class="space-y-4">
+                <!-- Current Author Display Notice -->
+                <div class="bg-white/5 p-3 rounded-xl border border-white/10 flex items-center justify-between text-xs">
+                    <span class="text-gray-400">Pubblicazione come:</span>
+                    <span id="modal-author-badge" class="font-bold text-cyan-400 bg-cyan-500/15 px-2.5 py-1 rounded-lg">—</span>
+                </div>
+
+                <!-- Title -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Titolo *</label>
+                    <input type="text" id="modal-title" required placeholder="Es. Schema Subnetting e Reti IP"
+                        class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                </div>
+
+                <!-- Subject Dropdown (Exact Timetable Subjects) -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Materia *</label>
+                    <select id="modal-subject" required class="w-full px-4 py-3 rounded-xl bg-gray-900 border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all cursor-pointer">
+                        <option value="Italiano / Storia">Italiano / Storia</option>
+                        <option value="Scienze Sperimentali / Fisica Lab">Scienze Sperimentali / Fisica Lab</option>
+                        <option value="Informatica e Reti Lab">Informatica e Reti Lab</option>
+                        <option value="Scienze Sperimentali / Chimica Lab">Scienze Sperimentali / Chimica Lab</option>
+                        <option value="Diritto">Diritto</option>
+                        <option value="Inglese Lab">Inglese Lab</option>
+                        <option value="TTRG">TTRG</option>
+                        <option value="Matematica">Matematica</option>
+                        <option value="IRC">IRC</option>
+                        <option value="Motoria (Palestra)">Motoria (Palestra)</option>
+                        <option value="Geografia">Geografia</option>
+                        <option value="Altro">Altro</option>
+                    </select>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Breve Descrizione *</label>
+                    <textarea id="modal-desc" rows="3" required placeholder="Cosa contiene questo appunto o mappa concettuale..."
+                        class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"></textarea>
+                </div>
+
+                <!-- Link to Maps/Notes -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Link Mappa / Documento (Drive, Canva, PDF) <span class="text-gray-500 normal-case font-normal">— opzionale</span></label>
+                    <div class="relative">
+                        <i class="fa-solid fa-link absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                        <input type="url" id="modal-link" placeholder="https://drive.google.com/... (puoi lasciarlo vuoto)"
+                            class="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                    </div>
+                </div>
+
+                <!-- Image URL -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">URL Foto / Anteprima Mappa <span class="text-gray-500 normal-case font-normal">— opzionale</span></label>
+                    <div class="relative">
+                        <i class="fa-solid fa-image absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                        <input type="url" id="modal-image" placeholder="https://... (puoi lasciarlo vuoto)"
+                            class="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                    </div>
+                </div>
+
+                <div class="pt-4 flex items-center justify-end gap-3">
+                    <button type="button" id="cancel-publish-btn" class="px-5 py-2.5 rounded-xl text-gray-400 hover:text-white text-sm font-medium transition-all">
+                        Annulla
+                    </button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-500 hover:opacity-90 text-white font-semibold text-sm shadow-lg transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Pubblica Ora
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- VIEW MODAL -->
+    <!-- ========================================== -->
+    <div id="view-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+        <div class="glass-modal w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-2xl relative transform scale-95 transition-all duration-300 max-h-[90vh] overflow-y-auto" id="view-modal-card">
+            <button id="close-view-modal-btn" class="absolute top-6 right-6 w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white flex items-center justify-center transition-all z-10">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="view-modal-content"></div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed top-6 right-6 z-50 transform translate-y-[-100px] opacity-0 transition-all duration-500 flex items-center gap-3 px-5 py-3.5 rounded-2xl glass-panel border border-emerald-500/30 text-white text-sm shadow-2xl">
+        <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span id="toast-message">Operazione completata con successo!</span>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT LOGIC -->
+    <!-- ========================================== -->
+    <script>
+        // COMPLETE 1 CIT CLASS ROSTER
+        const classRoster = [
+            "Casillo Loris",
+            "Attia Flubatir", // Class Rep
+            "Pozzi Elisa",
+            "Galimberti Lorenzo",
+            "Alla Haziz",
+            "Avanzato Alessandro",
+            "Castagna Nicolò",
+            "Pensotti Nicolas",
+            "Gaetani Mathias",
+            "Chen milena",
+            "Calogiuli Andrea",
+            "Fugalii Jacopo",
+            "Manganaro Andrea",
+            "Valsecchi Davide",
+            "Rigamonti Christian",
+            "Giussani Edoardo",
+            "Galbiati Alessandro",
+            "Zourack Amin",
+            "Huarcaya Ihan",
+            "Monroy Nethan",
+            "Peruzzi Leonardo"
+        ];
+
+        // LOCAL STORAGE & STATE (bacheca vuota: nessun appunto di esempio)
+        localStorage.removeItem('class_1cit_notes'); // rimuove i vecchi appunti di esempio
+        let notesData = [];
+        try { notesData = JSON.parse(localStorage.getItem('class_1cit_notes_v2')) || []; } catch (e) { notesData = []; }
+        let currentStudent = localStorage.getItem('class_1cit_current_student') || '';
+        if (!classRoster.includes(currentStudent)) currentStudent = '';
+        let activeSubject = 'all';
+        let searchQuery = '';
+
+        function esc(str) {
+            return String(str == null ? '' : str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        }
+        function saveNotes() { localStorage.setItem('class_1cit_notes_v2', JSON.stringify(notesData)); }
+
+        // DOM ELEMENTS
+        const pickerBtn = document.getElementById('student-picker-btn');
+        const pickerList = document.getElementById('student-picker-list');
+        const pickerLabel = document.getElementById('student-picker-label');
+        const pickerChevron = document.getElementById('student-picker-chevron');
+        const emptyTitle = document.getElementById('empty-title');
+        const emptyText = document.getElementById('empty-text');
+        const modalAuthorBadge = document.getElementById('modal-author-badge');
+        const notesGrid = document.getElementById('notes-grid');
+        const emptyState = document.getElementById('empty-state');
+        const totalNotesCount = document.getElementById('total-notes-count');
+        const searchInput = document.getElementById('search-input');
+        const subjectFilters = document.getElementById('subject-filters');
+        const resetFiltersBtn = document.getElementById('reset-filters');
+
+        const publishModal = document.getElementById('publish-modal');
+        const publishModalCard = document.getElementById('publish-modal-card');
+        const openPublishBtn = document.getElementById('open-publish-modal-btn');
+        const closePublishBtn = document.getElementById('close-publish-modal-btn');
+        const cancelPublishBtn = document.getElementById('cancel-publish-btn');
+        const publishForm = document.getElementById('publish-form');
+
+        const viewModal = document.getElementById('view-modal');
+        const viewModalCard = document.getElementById('view-modal-card');
+        const viewModalContent = document.getElementById('view-modal-content');
+        const closeViewModalBtn = document.getElementById('close-view-modal-btn');
+
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+
+        // STUDENT PICKER
+        function updateStudentUI() {
+            pickerLabel.textContent = currentStudent || 'Scegli il tuo nome';
+            pickerLabel.classList.toggle('text-gray-400', !currentStudent);
+            pickerLabel.classList.toggle('text-white', !!currentStudent);
+            modalAuthorBadge.textContent = currentStudent || 'Nessuno — scegli prima il tuo nome';
+        }
+
+        function buildPickerList() {
+            pickerList.innerHTML = '';
+            [...classRoster].sort((a, b) => a.localeCompare(b, 'it')).forEach(student => {
+                const selected = student === currentStudent;
+                const isRep = student === 'Attia Flubatir';
+                const item = document.createElement('button');
+                item.type = 'button';
+                item.setAttribute('role', 'option');
+                item.dataset.student = student;
+                item.className = 'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-sm transition-all ' +
+                    (selected ? 'bg-cyan-500/15 text-white border border-cyan-400/40' : 'text-gray-200 hover:bg-white/10 border border-transparent');
+                item.innerHTML =
+                    '<span class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ' +
+                    (isRep ? 'bg-amber-500/20 text-amber-300' : 'bg-purple-500/20 text-purple-300') + '">' +
+                    '<i class="fa-solid ' + (isRep ? 'fa-crown' : 'fa-user') + ' text-xs"></i></span>' +
+                    '<span class="flex-1 min-w-0 truncate font-medium">' + esc(student) +
+                    (isRep ? ' <span class="text-[10px] text-amber-300/80 font-normal">(Rappresentante)</span>' : '') + '</span>' +
+                    (selected ? '<i class="fa-solid fa-circle-check text-cyan-400"></i>' : '');
+                pickerList.appendChild(item);
+            });
+        }
+
+        function openPicker() {
+            buildPickerList();
+            pickerList.classList.remove('hidden');
+            pickerBtn.setAttribute('aria-expanded', 'true');
+            pickerChevron.classList.add('rotate-180');
+            const sel = pickerList.querySelector('.border-cyan-400\\/40');
+            if (sel) sel.scrollIntoView({ block: 'nearest' });
+        }
+        function closePicker() {
+            pickerList.classList.add('hidden');
+            pickerBtn.setAttribute('aria-expanded', 'false');
+            pickerChevron.classList.remove('rotate-180');
+        }
+
+        pickerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            pickerList.classList.contains('hidden') ? openPicker() : closePicker();
+        });
+        pickerList.addEventListener('click', (e) => {
+            const item = e.target.closest('[data-student]');
+            if (!item) return;
+            currentStudent = item.dataset.student;
+            localStorage.setItem('class_1cit_current_student', currentStudent);
+            updateStudentUI();
+            closePicker();
+            showToast('Ciao ' + currentStudent + '!');
+        });
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#student-picker')) closePicker();
+        });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePicker(); });
+
+        function initRoster() { updateStudentUI(); }
+
+        // BADGE CLASS MAPPINGS
+        function getSubjectBadgeClass(subject) {
+            const key = subject.toLowerCase();
+            if (key.includes('italiano')) return 'badge-italiano';
+            if (key.includes('fisica')) return 'badge-scienze-fisica';
+            if (key.includes('informatica')) return 'badge-informatica';
+            if (key.includes('chimica')) return 'badge-scienze-chimica';
+            if (key.includes('diritto')) return 'badge-diritto';
+            if (key.includes('inglese')) return 'badge-inglese';
+            if (key.includes('ttrg')) return 'badge-ttrg';
+            if (key.includes('matematica')) return 'badge-matematica';
+            if (key.includes('irc')) return 'badge-irc';
+            if (key.includes('motoria')) return 'badge-motoria';
+            if (key.includes('geografia')) return 'badge-geografia';
+            return 'badge-altro';
+        }
+
+        // RENDER NOTES GRID
+        function renderNotes() {
+            const q = searchQuery.toLowerCase();
+            const filtered = notesData.filter(note => {
+                const matchesSubject = activeSubject === 'all' || note.subject.toLowerCase() === activeSubject.toLowerCase();
+                const matchesSearch = note.title.toLowerCase().includes(q) ||
+                                      note.description.toLowerCase().includes(q) ||
+                                      note.subject.toLowerCase().includes(q) ||
+                                      note.author.toLowerCase().includes(q);
+                return matchesSubject && matchesSearch;
+            });
+
+            totalNotesCount.innerText = notesData.length;
+            notesGrid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                if (notesData.length === 0) {
+                    emptyTitle.textContent = 'La bacheca è vuota';
+                    emptyText.textContent = 'Nessun appunto ancora. Premi "Pubblica Appunto" per aggiungere il primo!';
+                } else {
+                    emptyTitle.textContent = 'Nessun appunto trovato';
+                    emptyText.textContent = 'Non ci sono elementi corrispondenti ai filtri attuali.';
+                }
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            emptyState.classList.remove('flex');
+
+            filtered.forEach(note => {
+                const badgeClass = getSubjectBadgeClass(note.subject);
+                const hasImg = note.image && note.image.trim() !== '';
+                const hasLink = note.link && note.link.trim() !== '';
+
+                notesGrid.innerHTML += `
+                    <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group cursor-pointer" onclick="openViewModal('${esc(note.id)}')">
+                        <div>
+                            <div class="relative ${hasImg ? 'h-44' : 'h-24'} overflow-hidden bg-gradient-to-br from-purple-600/25 via-indigo-600/15 to-cyan-500/25">
+                                ${hasImg ? `<img src="${esc(note.image)}" alt="${esc(note.title)}" onerror="this.remove()"
+                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">` : ''}
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0f1d] via-transparent to-transparent"></div>
+                                <span class="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-md ${badgeClass}">
+                                    ${esc(note.subject)}
+                                </span>
+                                <span class="absolute top-4 right-4 px-2.5 py-1 rounded-full text-[10px] font-medium bg-black/50 text-gray-300 backdrop-blur-md border border-white/10">
+                                    <i class="fa-regular fa-calendar mr-1"></i> ${esc(note.date)}
+                                </span>
+                            </div>
+
+                            <div class="p-5">
+                                <h3 class="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors line-clamp-2 mb-2">${esc(note.title)}</h3>
+                                <p class="text-xs text-gray-400 line-clamp-3 leading-relaxed mb-4">${esc(note.description)}</p>
+                            </div>
+                        </div>
+
+                        <div class="px-5 pb-5 pt-2 flex items-center justify-between border-t border-white/5 text-xs">
+                            <span class="text-gray-400 font-medium flex items-center gap-1.5 truncate max-w-[150px]">
+                                <i class="fa-solid fa-user-graduate text-cyan-400"></i> ${esc(note.author)}
+                            </span>
+                            <span class="text-cyan-400 font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1 shrink-0">
+                                ${hasLink ? 'Apri Mappa' : 'Dettagli'} <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                            </span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // SUBJECT FILTERS
+        subjectFilters.addEventListener('click', (e) => {
+            const btn = e.target.closest('.filter-btn');
+            if (!btn) return;
+
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('active', 'bg-gradient-to-r', 'from-purple-600', 'via-indigo-600', 'to-cyan-500', 'text-white', 'shadow-lg');
+                b.classList.add('glass-panel', 'text-gray-300');
+            });
+
+            btn.classList.add('active', 'bg-gradient-to-r', 'from-purple-600', 'via-indigo-600', 'to-cyan-500', 'text-white', 'shadow-lg');
+            btn.classList.remove('glass-panel', 'text-gray-300');
+
+            activeSubject = btn.getAttribute('data-subject');
+            renderNotes();
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderNotes();
+        });
+
+        resetFiltersBtn.addEventListener('click', () => {
+            searchQuery = '';
+            activeSubject = 'all';
+            searchInput.value = '';
+
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('active', 'bg-gradient-to-r', 'from-purple-600', 'via-indigo-600', 'to-cyan-500', 'text-white', 'shadow-lg');
+                b.classList.add('glass-panel', 'text-gray-300');
+            });
+
+            const allBtn = document.querySelector('[data-subject="all"]');
+            if (allBtn) {
+                allBtn.classList.add('active', 'bg-gradient-to-r', 'from-purple-600', 'via-indigo-600', 'to-cyan-500', 'text-white', 'shadow-lg');
+                allBtn.classList.remove('glass-panel', 'text-gray-300');
+            }
+
+            renderNotes();
+        });
+
+        // MODAL CONTROLS
+        function openPublishModal() {
+            if (!currentStudent) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                openPicker();
+                showToast('Prima scegli il tuo nome in alto');
+                return;
+            }
+            modalAuthorBadge.textContent = currentStudent;
+            publishModal.classList.remove('opacity-0', 'pointer-events-none');
+            publishModalCard.classList.remove('scale-95');
+            publishModalCard.classList.add('scale-100');
+        }
+
+        function closePublishModal() {
+            publishModal.classList.add('opacity-0', 'pointer-events-none');
+            publishModalCard.classList.remove('scale-100');
+            publishModalCard.classList.add('scale-95');
+            publishForm.reset();
+        }
+
+        openPublishBtn.addEventListener('click', openPublishModal);
+        closePublishBtn.addEventListener('click', closePublishModal);
+        cancelPublishBtn.addEventListener('click', closePublishModal);
+
+        publishModal.addEventListener('click', (e) => {
+            if (e.target === publishModal) closePublishModal();
+        });
+
+        // PUBLISH FORM SUBMISSION
+        publishForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (window.submitHook) return window.submitHook(e);
+
+            const title = document.getElementById('modal-title').value.trim();
+            const subject = document.getElementById('modal-subject').value;
+            const description = document.getElementById('modal-desc').value.trim();
+            const link = document.getElementById('modal-link').value.trim();
+            const image = document.getElementById('modal-image').value.trim();
+
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('it-IT', { day: '2-digit', month: 'short', year: 'numeric' });
+
+            const newNote = {
+                id: Date.now().toString(),
+                title,
+                subject,
+                description,
+                link,
+                image,
+                date: dateStr,
+                author: currentStudent
+            };
+
+            notesData.unshift(newNote);
+            saveNotes();
+
+            renderNotes();
+            closePublishModal();
+            showToast('Appunto pubblicato con successo da ' + currentStudent + '!');
+        });
+
+        // VIEW MODAL
+        window.openViewModal = function(id) {
+            const note = notesData.find(n => n.id === id);
+            if (!note) return;
+
+            const badgeClass = getSubjectBadgeClass(note.subject);
+            const hasImg = note.image && note.image.trim() !== '';
+            const hasLink = note.link && note.link.trim() !== '';
+
+            viewModalContent.innerHTML = `
+                <div class="space-y-6">
+                    ${hasImg ? `
+                    <div class="relative h-64 rounded-2xl overflow-hidden">
+                        <img src="${esc(note.image)}" alt="${esc(note.title)}" onerror="this.parentElement.remove()" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0a0f1d] via-black/20 to-transparent"></div>
+                        <span class="absolute top-4 left-4 px-3.5 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md ${badgeClass}">${esc(note.subject)}</span>
+                    </div>` : `
+                    <div class="pt-8"><span class="px-3.5 py-1.5 rounded-full text-xs font-semibold ${badgeClass}">${esc(note.subject)}</span></div>`}
+
+                    <div>
+                        <div class="flex items-center justify-between text-xs text-gray-400 mb-2">
+                            <span><i class="fa-solid fa-user-graduate text-cyan-400 mr-1"></i> Caricato da ${esc(note.author)}</span>
+                            <span><i class="fa-regular fa-calendar mr-1"></i> ${esc(note.date)}</span>
+                        </div>
+                        <h2 class="text-2xl font-extrabold text-white mb-3">${esc(note.title)}</h2>
+                        <p class="text-sm text-gray-300 leading-relaxed bg-white/5 p-4 rounded-2xl border border-white/5 whitespace-pre-line">${esc(note.description)}</p>
+                    </div>
+
+                    <div class="pt-4 flex flex-col sm:flex-row items-center gap-3">
+                        ${hasLink ? `
+                        <a href="${esc(note.link)}" target="_blank" rel="noopener noreferrer"
+                            class="w-full sm:w-auto flex-1 text-center bg-gradient-to-r from-cyan-500 to-purple-600 hover:opacity-90 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-up-right-from-square"></i> Apri Mappa / Documento
+                        </a>` : ''}
+                        <button onclick="deleteNote('${esc(note.id)}')" class="w-full ${hasLink ? 'sm:w-auto' : ''} px-5 py-3.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 text-sm font-semibold border border-red-500/20 transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-trash"></i> Elimina
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            viewModal.classList.remove('opacity-0', 'pointer-events-none');
+            viewModalCard.classList.remove('scale-95');
+            viewModalCard.classList.add('scale-100');
+        };
+
+        function closeViewModal() {
+            viewModal.classList.add('opacity-0', 'pointer-events-none');
+            viewModalCard.classList.remove('scale-100');
+            viewModalCard.classList.add('scale-95');
+        }
+
+        closeViewModalBtn.addEventListener('click', closeViewModal);
+        viewModal.addEventListener('click', (e) => {
+            if (e.target === viewModal) closeViewModal();
+        });
+
+        window.deleteNote = function(id) {
+            notesData = notesData.filter(n => n.id !== id);
+            saveNotes();
+            closeViewModal();
+            renderNotes();
+            showToast('Elemento eliminato con successo!');
+        };
+
+        function showToast(msg) {
+            toastMessage.innerText = msg;
+            toast.classList.remove('translate-y-[-100px]', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-[-100px]', 'opacity-0');
+            }, 3500);
+        }
+
+        // INIT ON LOAD
+        initRoster();
+        renderNotes();
+    </script>
+<script>
+// ===== FUNZIONI PRO =====
+// Per condividere la bacheca con tutta la classe: incolla qui l'URL dell'app Google Apps Script (vedi Code.gs)
+const SYNC_URL = 'https://script.google.com/macros/s/AKfycbzt00Fbq5idkyQo6VU4qTzSndk1929R5hy12i3v1Hnm__-FWUBv3_xZKW06uaqU7HiWfw/exec';
+const REP = 'Attia Flubatir', $ = id => document.getElementById(id);
+let sortMode = 'new', onlyFavs = false, editingId = null;
+const canEdit = n => currentStudent && (n.author === currentStudent || currentStudent === REP);
+const needName = () => { window.scrollTo({top:0,behavior:'smooth'}); openPicker(); showToast('Prima scegli il tuo nome in alto'); };
+
+function setSync(s) {
+    const c = $('sync-chip'), m = {
+        off:['💾 Solo su questo dispositivo','text-amber-300 bg-amber-500/10 border-amber-500/30'],
+        ok:['● Sincronizzato con la classe','text-emerald-300 bg-emerald-500/10 border-emerald-500/30'],
+        err:['⚠ Offline: riprovo…','text-red-300 bg-red-500/10 border-red-500/30']}[s];
+    c.textContent = m[0]; c.className = 'ml-auto text-[11px] font-semibold px-3 py-1.5 rounded-full border ' + m[1];
+}
+async function api(body) {
+    if (!SYNC_URL) return;
+    try { await fetch(SYNC_URL, {method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(body)}); setSync('ok'); }
+    catch (e) { setSync('err'); }
+}
+async function pull() {
+    if (!SYNC_URL) return;
+    try { const d = await (await fetch(SYNC_URL)).json(); if (Array.isArray(d)) { notesData = d; saveNotes(); renderNotes(); setSync('ok'); } }
+    catch (e) { setSync('err'); }
+}
+
+function renderNotes() {
+    const q = searchQuery.toLowerCase(), lk = n => (n.likes || []).length, ts = n => n.ts || +n.id;
+    const S = {new:(a,b)=>ts(b)-ts(a), old:(a,b)=>ts(a)-ts(b), az:(a,b)=>a.title.localeCompare(b.title,'it'), top:(a,b)=>lk(b)-lk(a)};
+    const list = notesData.filter(n =>
+        (activeSubject === 'all' || n.subject.toLowerCase() === activeSubject.toLowerCase()) &&
+        (!onlyFavs || (n.likes || []).includes(currentStudent)) &&
+        [n.title, n.description, n.subject, n.author].some(t => t.toLowerCase().includes(q))
+    ).sort((a, b) => (!!b.pinned - !!a.pinned) || S[sortMode](a, b));
+
+    totalNotesCount.innerText = notesData.length;
+    const none = list.length === 0;
+    emptyState.classList.toggle('hidden', !none); emptyState.classList.toggle('flex', none);
+    if (none) {
+        emptyTitle.textContent = notesData.length ? 'Nessun appunto trovato' : 'La bacheca è vuota';
+        emptyText.textContent = notesData.length ? 'Nessun risultato per i filtri attuali.' : 'Premi "Pubblica Appunto" per aggiungere il primo!';
+    }
+    notesGrid.innerHTML = list.map((n, i) => {
+        const img = n.image && n.image.trim(), liked = (n.likes || []).includes(currentStudent);
+        return `<div class="glass-card card-in rounded-3xl overflow-hidden flex flex-col justify-between group cursor-pointer" style="animation-delay:${Math.min(i,12)*50}ms" onclick="openViewModal('${esc(n.id)}')">
+            <div><div class="relative ${img?'h-44':'h-24'} overflow-hidden bg-gradient-to-br from-purple-600/25 via-indigo-600/15 to-cyan-500/25">
+                ${img ? `<img src="${esc(img)}" alt="" onerror="this.remove()" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">` : ''}
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0f1d] via-transparent to-transparent"></div>
+                <span class="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-md ${getSubjectBadgeClass(n.subject)}">${esc(n.subject)}</span>
+                <span class="absolute top-4 right-4 px-2.5 py-1 rounded-full text-[10px] font-medium ${n.pinned?'pin-badge':'bg-black/50 text-gray-300 border border-white/10'} backdrop-blur-md">
+                    ${n.pinned ? '<i class="fa-solid fa-thumbtack mr-1"></i>In evidenza' : `<i class="fa-regular fa-calendar mr-1"></i>${esc(n.date)}`}</span></div>
+                <div class="p-5"><h3 class="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors line-clamp-2 mb-2">${esc(n.title)}</h3>
+                <p class="text-xs text-gray-400 line-clamp-3 leading-relaxed mb-4">${esc(n.description)}</p></div></div>
+            <div class="px-5 pb-5 pt-3 flex items-center justify-between gap-2 border-t border-white/5 text-xs">
+                <span class="text-gray-400 font-medium flex items-center gap-1.5 truncate max-w-[110px]"><i class="fa-solid fa-user-graduate text-cyan-400"></i>${esc(n.author)}</span>
+                <button class="like-btn ${liked?'liked':''}" onclick="toggleLike('${esc(n.id)}',event)"><i class="fa-${liked?'solid':'regular'} fa-heart"></i>${lk(n)}</button>
+                <span class="text-cyan-400 font-semibold flex items-center gap-1 shrink-0">${n.link?'Apri':'Dettagli'} <i class="fa-solid fa-arrow-right text-[10px]"></i></span></div></div>`;
+    }).join('');
+}
+
+window.toggleLike = (id, ev) => {
+    if (ev) ev.stopPropagation();
+    if (!currentStudent) return needName();
+    const n = notesData.find(x => x.id === id); n.likes = n.likes || [];
+    const i = n.likes.indexOf(currentStudent); i < 0 ? n.likes.push(currentStudent) : n.likes.splice(i, 1);
+    saveNotes(); api({action:'upsert', note:n}); renderNotes();
+    if (!viewModal.classList.contains('pointer-events-none')) openViewModal(id);
+};
+window.togglePin = id => {
+    const n = notesData.find(x => x.id === id); n.pinned = !n.pinned;
+    saveNotes(); api({action:'upsert', note:n}); closeViewModal(); renderNotes(); showToast(n.pinned ? 'Appunto messo in evidenza' : 'Rimosso dall\'evidenza');
+};
+window.editNote = id => {
+    const n = notesData.find(x => x.id === id); if (!currentStudent) return needName();
+    closeViewModal(); openPublishModal(); editingId = id;
+    $('modal-title').value = n.title; $('modal-subject').value = n.subject; $('modal-desc').value = n.description;
+    $('modal-link').value = n.link || ''; $('modal-image').value = n.image || '';
+};
+window.copyLink = async id => {
+    const n = notesData.find(x => x.id === id);
+    try { await navigator.clipboard.writeText(n.link); showToast('Link copiato!'); } catch (e) { showToast('Copia non riuscita'); }
+};
+window.deleteNote = id => {
+    const n = notesData.find(x => x.id === id);
+    if (!n || !canEdit(n)) return showToast('Solo l\'autore o il rappresentante può eliminare');
+    if (!confirm('Eliminare "' + n.title + '"?')) return;
+    notesData = notesData.filter(x => x.id !== id); saveNotes(); api({action:'delete', id});
+    closeViewModal(); renderNotes(); showToast('Appunto eliminato');
+};
+
+const _open = window.openViewModal;
+window.openViewModal = id => {
+    _open(id);
+    const n = notesData.find(x => x.id === id), row = viewModalContent.querySelector('.pt-4'), liked = (n.likes || []).includes(currentStudent);
+    const del = row.querySelector('[onclick^="deleteNote"]'); if (!canEdit(n)) del.remove();
+    const b = (c, ic, t, fn) => `<button onclick="${fn}" class="w-full sm:w-auto px-4 py-3.5 rounded-xl text-sm font-semibold border transition-all flex items-center justify-center gap-2 ${c}"><i class="${ic}"></i>${t}</button>`;
+    row.insertAdjacentHTML('beforeend',
+        b('bg-pink-500/10 text-pink-300 border-pink-500/30', `fa-${liked?'solid':'regular'} fa-heart`, (n.likes||[]).length, `toggleLike('${n.id}')`) +
+        (n.link ? b('bg-white/5 text-gray-200 border-white/15', 'fa-solid fa-copy', 'Copia link', `copyLink('${n.id}')`) : '') +
+        (canEdit(n) ? b('bg-white/5 text-gray-200 border-white/15', 'fa-solid fa-pen', 'Modifica', `editNote('${n.id}')`) : '') +
+        (currentStudent === REP ? b('bg-amber-500/10 text-amber-300 border-amber-500/30', 'fa-solid fa-thumbtack', n.pinned ? 'Rimuovi' : 'Evidenzia', `togglePin('${n.id}')`) : ''));
+    if (n.likes && n.likes.length) row.insertAdjacentHTML('afterend', `<p class="text-[11px] text-gray-500 -mt-2">❤️ Piace a: ${n.likes.map(esc).join(', ')}</p>`);
+};
+
+window.submitHook = () => {
+    const g = id => $(id).value.trim(), f = {title:g('modal-title'), subject:$('modal-subject').value, description:g('modal-desc'), link:g('modal-link'), image:g('modal-image')};
+    let n;
+    if (editingId) { n = notesData.find(x => x.id === editingId); Object.assign(n, f); }
+    else { n = {id:Date.now().toString(), ts:Date.now(), date:new Date().toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'numeric'}), author:currentStudent, likes:[], pinned:false, ...f}; notesData.unshift(n); }
+    saveNotes(); api({action:'upsert', note:n}); renderNotes(); closePublishModal();
+    showToast(editingId ? 'Appunto modificato!' : 'Pubblicato da ' + currentStudent + '!'); editingId = null;
+};
+openPublishBtn.addEventListener('click', () => { editingId = null; });
+
+$('sort-select').onchange = e => { sortMode = e.target.value; renderNotes(); };
+$('fav-toggle').onclick = e => {
+    if (!currentStudent) return needName();
+    onlyFavs = !onlyFavs; e.currentTarget.classList.toggle('on', onlyFavs); renderNotes();
+};
+$('export-btn').onclick = () => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(notesData, null, 2)], {type:'application/json'}));
+    a.download = 'hub-1cit-backup-' + new Date().toISOString().slice(0, 10) + '.json'; a.click(); showToast('Backup scaricato');
+};
+$('import-btn').onclick = () => $('import-file').click();
+$('import-file').onchange = async e => {
+    try {
+        const arr = JSON.parse(await e.target.files[0].text()); let added = 0;
+        arr.forEach(n => { if (n.id && n.title && !notesData.some(x => x.id === n.id)) { notesData.push(n); api({action:'upsert', note:n}); added++; } });
+        saveNotes(); renderNotes(); showToast(added + ' appunti importati');
+    } catch (err) { showToast('File non valido'); }
+    e.target.value = '';
+};
+document.addEventListener('keydown', e => {
+    if (/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
+    if (e.key === '/') { e.preventDefault(); searchInput.focus(); }
+    if (e.key === 'n') openPublishBtn.click();
+});
+
+setSync(SYNC_URL ? 'ok' : 'off'); renderNotes(); pull(); if (SYNC_URL) setInterval(pull, 45000);
+</script>
+</body>
+</html>
